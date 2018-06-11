@@ -4,12 +4,12 @@ using System.Reflection;
 namespace Abp.Grpc.Server.Configuration
 {
     /// <inheritdoc />
-    public class GpcServerConfiguration : IGrpcServerConfiguration
+    public class GrpcServerConfiguration : IGrpcServerConfiguration
     {
         private readonly List<Assembly> _grpcAssemblies;
 
         /// <inheritdoc />
-        public GpcServerConfiguration()
+        public GrpcServerConfiguration()
         {
             IsEnableConsul = false;
             _grpcAssemblies = new List<Assembly>();

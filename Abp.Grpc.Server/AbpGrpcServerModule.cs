@@ -22,7 +22,7 @@ namespace Abp.Grpc.Server
         public override void PreInitialize()
         {
             IocManager.Register<IConsulClientFactory, ConsulClientFactory>();
-            IocManager.Register<IGrpcServerConfiguration>();
+            IocManager.Register<IGrpcServerConfiguration, GrpcServerConfiguration>();
         }
 
         public override void Initialize()

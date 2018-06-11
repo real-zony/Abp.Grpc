@@ -1,9 +1,13 @@
 ﻿using Abp.Grpc.Client.Configuration;
 using Abp.Grpc.Client.Infrastructure.Consul;
 using Abp.Grpc.Client.Infrastructure.GrpcChannel;
+using Abp.Grpc.Client.Utility;
 using Abp.Modules;
+using Grpc.Core;
 using Polly;
+using System.Collections.Generic;
 using System.Linq;
+using Abp.Threading;
 
 namespace Abp.Grpc.Client
 {
@@ -17,6 +21,7 @@ namespace Abp.Grpc.Client
             IocManager.Register<IConsulClientFactory, ConsulClientFactory>();
             IocManager.Register<IGrpcClientConfiguration, GrpcClientConfiguration>();
             IocManager.Register<IGrpcChannelFactory, GrpcChannelFactory>();
+            IocManager.Register<IGRpcConnectionUtility, GRpcConnectionUtility>();
         }
 
         public override void Initialize()
@@ -46,24 +51,34 @@ namespace Abp.Grpc.Client
             var consulClient = IocManager.Resolve<IConsulClientFactory>().Get(config.ConsulRegistryConfiguration);
             var grpcChannelFactory = IocManager.Resolve<IGrpcChannelFactory>();
 
-            var policy = Policy.TimeoutAsync(5, (context, span, arg3) => throw new AbpInitializationException("无法连接到 Consul 集群."));
+            var policy = Policy.Timeout(5, (context, span, arg3) => throw new AbpInitializationException("无法连接到 Consul 集群."));
 
-            policy.ExecuteAsync(async () =>
+            policy.Execute(() =>
             {
-                var services = await consulClient.Catalog.Services();
-                foreach (var service in services.Response)
+                AsyncHelper.RunSync(async () =>
                 {
-                    var serviceInfo = await consulClient.Catalog.Service(service.Key);
-                    var grpcServerInfo = serviceInfo.Response.SkipWhile(z => !z.ServiceTags.Contains("GRpc"));
-
-                    foreach (var info in grpcServerInfo)
+                    var services = await consulClient.Catalog.Services();
+                    foreach (var service in services.Response)
                     {
-                        if (_grpcClientConfiguration.GrpcServers.ContainsKey(info.ServiceName))
+                        var serviceInfo = await consulClient.Catalog.Service(service.Key);
+                        var grpcServerInfo = serviceInfo.Response.SkipWhile(z => !z.ServiceTags.Contains("Grpc"));
+
+                        //TODO: 此处可做负载均衡
+                        foreach (var info in grpcServerInfo)
                         {
-                            _grpcClientConfiguration.GrpcServers[info.ServiceName].Add(grpcChannelFactory.Get(info.ServiceAddress, info.ServicePort));
+                            if (!_grpcClientConfiguration.GrpcServers.ContainsKey(info.ServiceName))
+                            {
+                                _grpcClientConfiguration.GrpcServers.Add(info.ServiceName,
+                                    new List<Channel> {grpcChannelFactory.Get(info.ServiceAddress, info.ServicePort)});
+                            }
+                            else
+                            {
+                                _grpcClientConfiguration.GrpcServers[info.ServiceName]
+                                    .Add(grpcChannelFactory.Get(info.ServiceAddress, info.ServicePort));
+                            }
                         }
                     }
-                }
+                });
             });
         }
     }

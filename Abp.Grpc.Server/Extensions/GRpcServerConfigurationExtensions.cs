@@ -7,14 +7,14 @@ namespace Abp.Grpc.Server.Extensions
     /// <summary>
     /// GRPC 配置相关的扩展方法
     /// </summary>
-    public static class GRpcServerConfigurationExtensions
+    public static class GrpcServerConfigurationExtensions
     {
         /// <summary>
         /// 启用 GRPC 服务
         /// </summary>
         /// <param name="configs">Abp 配置模块</param>
         /// <param name="optionAction">配置操作</param>
-        public static IGrpcServerConfiguration UseGrpcService(this IModuleConfigurations configs, Action<IGrpcServerConfiguration> optionAction)
+        public static IGrpcServerConfiguration UseGrpcService(this IModuleConfigurations configs, Action<IGrpcConfiguration> optionAction)
         {
             var config = configs.AbpConfiguration.Get<IGrpcServerConfiguration>();
             optionAction(config);
