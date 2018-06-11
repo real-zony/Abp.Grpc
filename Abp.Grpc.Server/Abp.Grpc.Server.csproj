@@ -7,6 +7,9 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>asp.net;asp.net mvc;boilerplate;application framework;web framework;framework;domain driven design;asp.net core</PackageTags>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageProjectUrl>https://github.com/GameBelial/Abp.Grpc</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/GameBelial/Abp.Grpc</RepositoryUrl>
+    <PackageLicenseUrl>https://github.com/GameBelial/Abp.Grpc/blob/master/LICENSE.txt</PackageLicenseUrl>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

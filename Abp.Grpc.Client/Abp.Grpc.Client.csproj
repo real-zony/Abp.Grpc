@@ -7,6 +7,9 @@
     <Description>集成了 MagicOnion 与 Consul 服务发现的 RPC 模块，支持与 ABP 框架一起使用。</Description>
     <RepositoryType>git</RepositoryType>
     <PackageTags>asp.net;asp.net mvc;boilerplate;application framework;web framework;framework;domain driven design;asp.net core</PackageTags>
+    <PackageLicenseUrl>https://github.com/GameBelial/Abp.Grpc/blob/master/LICENSE.txt</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/GameBelial/Abp.Grpc</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/GameBelial/Abp.Grpc</RepositoryUrl>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
