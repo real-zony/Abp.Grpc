@@ -2,15 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Zony</Authors>
-    <Description>集成了 MagicOnion 与 Consul 服务注册的 RPC 模块，支持与 ABP 框架一起使用。</Description>
+    <Description>集成了 MagicOnion 与 Consul 服务发现的 RPC 模块，支持与 ABP 框架一起使用。</Description>
     <RepositoryType>git</RepositoryType>
     <PackageTags>asp.net;asp.net mvc;boilerplate;application framework;web framework;framework;domain driven design;asp.net core</PackageTags>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>bin\Debug\netstandard2.0\Abp.Grpc.Server.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\netstandard2.0\Abp.Grpc.Client.xml</DocumentationFile>
     <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
 
