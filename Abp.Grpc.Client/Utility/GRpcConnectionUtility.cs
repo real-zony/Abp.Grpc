@@ -7,12 +7,12 @@ using System.Linq;
 namespace Abp.Grpc.Client.Utility
 {
     /// <inheritdoc />
-    public class GRpcConnectionUtility : IGRpcConnectionUtility
+    public class GrpcConnectionUtility : IGrpcConnectionUtility
     {
         private readonly IGrpcClientConfiguration _clientConfiguration;
 
         /// <inheritdoc />
-        public GRpcConnectionUtility(IGrpcClientConfiguration clientConfiguration)
+        public GrpcConnectionUtility(IGrpcClientConfiguration clientConfiguration)
         {
             _clientConfiguration = clientConfiguration;
         }

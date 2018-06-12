@@ -5,7 +5,7 @@ namespace Abp.Grpc.Client.Utility
     /// <summary>
     /// GRpc 连接管理器
     /// </summary>
-    public interface IGRpcConnectionUtility
+    public interface IGrpcConnectionUtility
     {
         /// <summary>
         /// 获得指定的远程服务接口
