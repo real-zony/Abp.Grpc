@@ -134,3 +134,103 @@ public interface IUserAuthenticationService : IService<IUserAuthenticationServic
 }
 ```
 
+# Abp.Grpc.Client 使用说明
+## 简介
+
+本模块使网站/程序能够支持 Grpc 服务调用，从 Consul 当中发现可用的 Rpc 服务，并且进行调用。
+
+## 安装
+
+NUGET 包地址：[https://www.nuget.org/packages/Abp.Grpc.Client/](https://www.nuget.org/packages/Abp.Grpc.Client/)
+包名称：Abp.Grpc.Client
+包管理器命令：
+
+```shell
+Install-Package Abp.Grpc.Client -Version 1.0.7	
+```
+
+包版本：1.0.7
+
+## 配置
+
+首先在 Web.Core 项目或者 Web.Host 的模块的 ```PreInitiailze()``` 方法当中进行配置，首先引入以下命名空间：
+
+```csharp
+using Abp.GRpc.Client;
+using Abp.GRpc.Client.Configuration;
+using Abp.GRpc.Client.Extensions;
+```
+
+然后在启动模块的顶部加上依赖特性：
+
+```csharp
+[DependsOn(typeof(AbpGrpcClientModule)]
+public class StartupModule : AbpModule
+{
+	// 其他代码
+}
+```
+
+重载其 ```PreInitialize``` 方法，进行模块配置：
+
+```csharp
+public override void PreInitialize()
+{
+    // 传入 Consul 的 IP 地址与端口号
+	Configuration.Modules.UseGrpcClient(new ConsulRegistryConfiguration("192.168.100.107", 8500, null));
+}
+```
+
+## 使用
+
+### 定义服务接口
+
+要使用远程的 RPC 服务就需要你拥有跟远程服务一样的接口定义，最佳实践应该是将定义独立为一个项目，Server 与 Client 引用同一个项目即可，下面我们来定义 RPC 服务的接口：
+
+```csharp
+public interface IMyService : IService<IMyService>
+{
+    UnaryResult<int> CalculateNumber(int x,int y);
+}
+```
+
+这里的定义与 Server 那边一样，所以我们定义好之后就可以调用了。
+
+### 注入连接管理器
+
+要调用远程服务，需要在你是用的地方注入连接管理器 ```IGrpcConnectionUtility```，然后通过 ```IGrpcConnectionUtility.GetRemoteService``` 方法即可获得服务。
+
+```csharp
+public class TestAppService : ApplicationService
+{
+	private readonly IGrpcConnectionUtility _connectionUtility;
+	
+	public TestAppService(IGrpcConnectionUtility connectionUtility)
+    {
+    	_connectionUtility = connectionUtility;
+    }
+    
+    public async Task TestMethod()
+    {
+    	var result = await _connectionUtility.GetRemoteService<IMyService>("BasicDataServer").CalculateNumber(1,1);
+    	Console.WriteLine("计算结果:" + result);
+    	return Task.FromResult(0);
+    }
+}
+```
+
+这里注意你的服务名称一定要与之前注册的服务名称一致。
+
+## 注意事项
+
+这里的服务名称应该是存放在 appsettings 里面，通过Configuration 来获取具体的服务名称，此处是为了演示而直接硬编码书写，实际开发过程中，服务名称应该是由 appsettings 里面拿去，其节点应该统一定义为：
+
+```json
+{
+  "GrpcServer": {
+    // 基础数据微服务
+    "BasicDataServerName": "BasicDataGrpc"
+  }
+}
+```
+
