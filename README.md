@@ -1,3 +1,6 @@
+![https://badge.fury.io/nu/Abp.Grpc.Server.svg](https://badge.fury.io/nu/Abp.Grpc.Server.svg)
+[![NuGet version](https://badge.fury.io/nu/Abp.Grpc.Client.svg)](https://badge.fury.io/nu/Abp.Grpc.Client)
+
 # Abp.Grpc.Server 使用说明
 ## 简介
 
