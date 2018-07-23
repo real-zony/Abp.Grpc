@@ -9,7 +9,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Abp.Grpc.Client", "Abp.Grpc
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{3BCBA144-98C9-4AF1-A530-9E13D38794E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abp.Grpc.Tests", "test\Abp.Grpc.Tests\Abp.Grpc.Tests.csproj", "{9129BB2F-DC28-45B4-9957-9132EA49C126}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Abp.Grpc.Tests", "test\Abp.Grpc.Tests\Abp.Grpc.Tests.csproj", "{9129BB2F-DC28-45B4-9957-9132EA49C126}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2A842DBE-F825-43B4-8BB9-BABB26E0FF4A}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
