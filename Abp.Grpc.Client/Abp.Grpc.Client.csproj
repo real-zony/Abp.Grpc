@@ -19,10 +19,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Abp" Version="3.7.0" />
-    <PackageReference Include="Consul" Version="0.7.2.4" />
-    <PackageReference Include="MagicOnion" Version="0.5.2" />
-    <PackageReference Include="Polly" Version="6.0.1" />
+    <PackageReference Include="Abp" Version="3.7.2" />
+    <PackageReference Include="Consul" Version="0.7.2.5" />
+    <PackageReference Include="MagicOnion" Version="0.5.3" />
+    <PackageReference Include="Polly" Version="6.1.0" />
   </ItemGroup>
 
 </Project>
