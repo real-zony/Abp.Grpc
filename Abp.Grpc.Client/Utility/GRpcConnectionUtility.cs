@@ -1,5 +1,6 @@
 ﻿using Abp.Grpc.Client.Configuration;
 using Abp.UI;
+using Grpc.Core;
 using MagicOnion;
 using MagicOnion.Client;
 using System.Linq;
@@ -27,6 +28,13 @@ namespace Abp.Grpc.Client.Utility
             if (serviceChannel == null) throw new UserFriendlyException("对应的服务下面没有可用的服务节点。");
 
             return MagicOnionClient.Create<TService>(serviceChannel);
+        }
+
+        /// <inheritdoc />
+        public TService GetRemoteServiceForDebug<TService>() where TService : IService<TService>
+        {
+            return MagicOnionClient.Create<TService>(new Channel(_clientConfiguration.DebugGrpcServerIp,
+                _clientConfiguration.DebugGrpcServerPort, ChannelCredentials.Insecure));
         }
     }
 }

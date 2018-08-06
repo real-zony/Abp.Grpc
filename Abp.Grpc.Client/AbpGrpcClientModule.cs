@@ -29,16 +29,25 @@ namespace Abp.Grpc.Client
         public override void PostInitialize()
         {
             _grpcClientConfiguration = IocManager.Resolve<IGrpcClientConfiguration>();
-            ScanAllAvailableGrpcServices(_grpcClientConfiguration);
+
+            if (!_grpcClientConfiguration.IsDebugMode)
+            {
+                ScanAllAvailableGrpcServices(_grpcClientConfiguration);
+            }
         }
 
         public override void Shutdown()
         {
-            foreach (var channels in _grpcClientConfiguration.GrpcServers.Values)
+            if (!_grpcClientConfiguration.IsDebugMode)
             {
-                foreach (var channel in channels)
+                // 遍历所有已注册的 Grpc 服务
+                foreach (var channels in _grpcClientConfiguration.GrpcServers.Values)
                 {
-                    channel.ShutdownAsync().Wait();
+                    // 遍历频道并关闭
+                    foreach (var channel in channels)
+                    {
+                        channel.ShutdownAsync().GetAwaiter().GetResult();
+                    }
                 }
             }
         }

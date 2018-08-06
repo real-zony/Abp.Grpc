@@ -30,5 +30,27 @@ namespace Abp.Grpc.Client.Configuration
         /// <param name="services">Grpc 服务名称集合</param>
         /// <returns></returns>
         IGrpcClientConfiguration AddGrpcServices(IEnumerable<string> services);
+
+        /// <summary>
+        /// 启用调试模式
+        /// </summary>
+        /// <param name="debugGrpcServerIp">远程 Grpc 服务器 IP</param>
+        /// <param name="debugGrpcServerPort">远程 Grpc 服务器端口</param>
+        void SetDebugMode(string debugGrpcServerIp, int debugGrpcServerPort);
+
+        /// <summary>
+        /// 是否处于调试模式
+        /// </summary>
+        bool IsDebugMode { get; }
+
+        /// <summary>
+        /// 调试模式时，指定的远程 Grpc 提供服务器 IP
+        /// </summary>
+        string DebugGrpcServerIp { get; }
+
+        /// <summary>
+        /// 调试模式时，指定的远程 Grpc 提供服务器端口
+        /// </summary>
+        int DebugGrpcServerPort { get; }
     }
 }
