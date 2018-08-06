@@ -1,13 +1,13 @@
 ﻿using Abp.Grpc.Client.Configuration;
 using Abp.Grpc.Client.Infrastructure.Consul;
 using Abp.Grpc.Client.Infrastructure.GrpcChannel;
-using Abp.Grpc.Client.Utility;
+using Abp.Grpc.Client.Installer;
 using Abp.Modules;
+using Abp.Threading;
 using Grpc.Core;
 using Polly;
 using System.Collections.Generic;
 using System.Linq;
-using Abp.Threading;
 
 namespace Abp.Grpc.Client
 {
@@ -18,10 +18,7 @@ namespace Abp.Grpc.Client
 
         public override void PreInitialize()
         {
-            IocManager.Register<IConsulClientFactory, ConsulClientFactory>();
-            IocManager.Register<IGrpcClientConfiguration, GrpcClientConfiguration>();
-            IocManager.Register<IGrpcChannelFactory, GrpcChannelFactory>();
-            IocManager.Register<IGrpcConnectionUtility, GrpcConnectionUtility>();
+            IocManager.IocContainer.Install(new AbpGrpcClientInstaller());
         }
 
         public override void Initialize()
@@ -46,6 +43,10 @@ namespace Abp.Grpc.Client
             }
         }
 
+        /// <summary>
+        /// 扫描所有可用的远端服务
+        /// </summary>
+        /// <param name="config">配置项</param>
         private void ScanAllAvailableGrpcServices(IGrpcClientConfiguration config)
         {
             var consulClient = IocManager.Resolve<IConsulClientFactory>().Get(config.ConsulRegistryConfiguration);
@@ -69,7 +70,7 @@ namespace Abp.Grpc.Client
                             if (!_grpcClientConfiguration.GrpcServers.ContainsKey(info.ServiceName))
                             {
                                 _grpcClientConfiguration.GrpcServers.Add(info.ServiceName,
-                                    new List<Channel> {grpcChannelFactory.Get(info.ServiceAddress, info.ServicePort)});
+                                    new List<Channel> { grpcChannelFactory.Get(info.ServiceAddress, info.ServicePort) });
                             }
                             else
                             {
