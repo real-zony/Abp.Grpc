@@ -1,3 +1,5 @@
+[TOC]
+
 # 0.简介
 
 Abp.Grpc 包是基于 Abp 框架并集成 MagicOnion 实现的一个模块，能够使你的 Abp 项目支持 Grpc，并且还集成了 Consul 进行服务注册与发现。
