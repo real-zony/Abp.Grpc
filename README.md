@@ -17,7 +17,7 @@ Abp.Grpc 包是基于 Abp 框架并集成 MagicOnion 实现的一个模块，能
 
 在定义接口的时候可能会很复杂，但是使用还是挺简单的。
 
-## 3.1服务提供者
+## 3.1 服务提供者
 
 ### 3.1.1 安装 NuGet 包
 
@@ -222,7 +222,7 @@ public class TestAppService : ApplicationService
 }
 ```
 
-## 4.DEMO 地址
+# 4.DEMO 地址
 
 如果你仍然对以上说明感觉到困惑，请参考 DEMO 进行实践。
 
