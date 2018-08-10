@@ -1,7 +1,7 @@
 ﻿using Abp.Grpc.Client.Configuration;
-using Abp.Grpc.Client.Infrastructure.Consul;
 using Abp.Grpc.Client.Infrastructure.GrpcChannel;
 using Abp.Grpc.Client.Utility;
+using Abp.Grpc.Common.Infrastructure;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;

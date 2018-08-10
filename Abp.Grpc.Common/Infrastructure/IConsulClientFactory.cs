@@ -1,7 +1,7 @@
-﻿using Abp.Grpc.Client.Configuration;
+﻿using Abp.Grpc.Common.Configuration;
 using Consul;
 
-namespace Abp.Grpc.Client.Infrastructure.Consul
+namespace Abp.Grpc.Common.Infrastructure
 {
     /// <summary>
     /// Consul Client 工厂

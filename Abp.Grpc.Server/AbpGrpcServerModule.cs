@@ -1,5 +1,6 @@
-﻿using Abp.Grpc.Server.Configuration;
-using Abp.Grpc.Server.Infrastructure.Consul;
+﻿using Abp.Grpc.Common.Configuration;
+using Abp.Grpc.Common.Infrastructure;
+using Abp.Grpc.Server.Configuration;
 using Abp.Modules;
 using Consul;
 using Grpc.Core;
@@ -7,14 +8,14 @@ using MagicOnion.Server;
 using System;
 using System.Linq;
 using System.Net;
-using GRpcServer = Grpc.Core.Server;
+using GrpcServer = Grpc.Core.Server;
 
 namespace Abp.Grpc.Server
 {
     [DependsOn(typeof(AbpKernelModule))]
     public class AbpGrpcServerModule : AbpModule
     {
-        private GRpcServer _grpcServer;
+        private GrpcServer _grpcServer;
 
         private IConsulClient _consulClient;
         private AgentServiceRegistration _agentServiceRegistration;
@@ -50,7 +51,7 @@ namespace Abp.Grpc.Server
         /// <param name="config">Grpc 配置项</param>
         private void InitializeGrpcServer(IGrpcServerConfiguration config)
         {
-            _grpcServer = new GRpcServer
+            _grpcServer = new GrpcServer
             {
                 Ports = { new ServerPort(config.GrpcBindAddress, config.GrpcBindPort, ServerCredentials.Insecure) },
                 Services =
@@ -71,7 +72,7 @@ namespace Abp.Grpc.Server
         {
             if (!config.IsEnableConsul) return;
 
-            var currentIpAddress = GetCurrentIpAddress();
+            var currentIpAddress = GetCurrentIpAddress(config);
             _consulClient = IocManager.Resolve<IConsulClientFactory>()
                 .Get(new ConsulRegistryConfiguration(config.ConsulAddress, config.ConsulPort, null));
 
@@ -100,8 +101,10 @@ namespace Abp.Grpc.Server
         /// </summary>
         /// <exception cref="AbpInitializationException">当无法正常获得当前主机 IP 地址的时候会抛出本异常</exception>
         /// <returns>IP 地址的字符串表现形式</returns>
-        private string GetCurrentIpAddress()
+        private string GetCurrentIpAddress(IGrpcServerConfiguration config)
         {
+            if (!string.IsNullOrEmpty(config.ConsulHealthCheckAddress)) return config.ConsulHealthCheckAddress;
+
             IPAddress localAddress = Dns.GetHostAddresses(Dns.GetHostName()).FirstOrDefault();
             if (localAddress == null) throw new AbpInitializationException("无法初始化项目，无法获取到当前服务器的地址.");
             return localAddress.ToString();

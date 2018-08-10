@@ -1,8 +1,8 @@
-﻿using Abp.Grpc.Server.Configuration;
+﻿using Abp.Grpc.Common.Configuration;
 using Consul;
 using System;
 
-namespace Abp.Grpc.Server.Infrastructure.Consul
+namespace Abp.Grpc.Common.Infrastructure
 {
     /// <inheritdoc />
     public class ConsulClientFactory : IConsulClientFactory

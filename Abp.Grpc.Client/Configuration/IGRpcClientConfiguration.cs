@@ -1,4 +1,5 @@
-﻿using Grpc.Core;
+﻿using Abp.Grpc.Common.Configuration;
+using Grpc.Core;
 using System.Collections.Generic;
 
 namespace Abp.Grpc.Client.Configuration

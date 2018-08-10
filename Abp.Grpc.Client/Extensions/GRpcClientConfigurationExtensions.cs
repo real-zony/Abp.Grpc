@@ -1,5 +1,6 @@
 ﻿using Abp.Configuration.Startup;
 using Abp.Grpc.Client.Configuration;
+using Abp.Grpc.Common.Configuration;
 
 namespace Abp.Grpc.Client.Extensions
 {

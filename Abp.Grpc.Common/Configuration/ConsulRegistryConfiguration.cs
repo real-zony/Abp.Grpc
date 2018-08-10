@@ -1,4 +1,4 @@
-﻿namespace Abp.Grpc.Server.Configuration
+﻿namespace Abp.Grpc.Common.Configuration
 {
     /// <summary>
     /// Consul 注册配置

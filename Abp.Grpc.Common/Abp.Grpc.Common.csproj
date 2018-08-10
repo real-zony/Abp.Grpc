@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>3.8.2.0</Version>
+    <Authors>Zony</Authors>
+    <Company>Zony</Company>
+    <Product>Abp.Grpc.Common</Product>
+    <Description>集成了 MagicOnion 与 Consul 服务发现的 RPC 模块，支持与 ABP 框架一起使用。</Description>
+    <PackageLicenseUrl>https://github.com/GameBelial/Abp.Grpc/blob/master/LICENSE.txt</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/GameBelial/Abp.Grpc</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/GameBelial/Abp.Grpc</RepositoryUrl>
+    <PackageTags>git</PackageTags>
+    <PackageReleaseNotes>asp.net;asp.net mvc;boilerplate;application framework;web framework;framework;domain driven design;asp.net core</PackageReleaseNotes>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Abp" Version="3.8.2" />
+    <PackageReference Include="Consul" Version="0.7.2.6" />
+    <PackageReference Include="MagicOnion" Version="0.5.3" />
+  </ItemGroup>
+
+</Project>

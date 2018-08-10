@@ -21,9 +21,14 @@
         int ConsulPort { get; set; }
 
         /// <summary>
-        /// 健康检查接口地址端口
+        /// 服务健康检查接口的端口
         /// </summary>
         int ConsulHealthCheckPort { get; set; }
+        
+        /// <summary>
+        /// 服务健康检查接口的地址
+        /// </summary>
+        string ConsulHealthCheckAddress { get; set; }
 
         /// <summary>
         /// 注册到 Consul 的服务名称

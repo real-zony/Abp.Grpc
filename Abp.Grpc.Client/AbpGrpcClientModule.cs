@@ -1,7 +1,8 @@
-﻿using Abp.Grpc.Client.Configuration;
-using Abp.Grpc.Client.Infrastructure.Consul;
+﻿using Abp.Dependency;
+using Abp.Grpc.Client.Configuration;
 using Abp.Grpc.Client.Infrastructure.GrpcChannel;
 using Abp.Grpc.Client.Installer;
+using Abp.Grpc.Common.Infrastructure;
 using Abp.Modules;
 using Abp.Threading;
 using Grpc.Core;
@@ -23,7 +24,11 @@ namespace Abp.Grpc.Client
 
         public override void Initialize()
         {
-            IocManager.RegisterAssemblyByConvention(typeof(AbpGrpcClientModule).Assembly);
+            IocManager.RegisterAssemblyByConvention(typeof(AbpGrpcClientModule).Assembly,
+                new ConventionalRegistrationConfig
+                {
+                    InstallInstallers = false
+                });
         }
 
         public override void PostInitialize()

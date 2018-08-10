@@ -27,6 +27,11 @@ namespace Abp.Grpc.Server.Configuration
         /// <inheritdoc />
         public int ConsulHealthCheckPort { get; set; }
 
+        /// <summary>
+        /// 服务健康检查接口的地址
+        /// </summary>
+        public string ConsulHealthCheckAddress { get; set; }
+
         /// <inheritdoc />
         public string RegistrationServiceName { get; set; }
 
