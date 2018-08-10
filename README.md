@@ -1,35 +1,37 @@
-# 简介
+# 0.简介
+
 Abp.Grpc 包是基于 Abp 框架并集成 MagicOnion 实现的一个模块，能够使你的 Abp 项目支持 Grpc，并且还集成了 Consul 进行服务注册与发现。
 
-# 目前存在的问题
+# 1.目前存在的问题
+
 参考 **[Issues](https://github.com/GameBelial/Abp.Grpc/issues)** 里面里程碑提列出来的问题。
 
-# 包状态
+# 2.包状态
+
 | Package         |                            Status                            |
 | :-------------- | :----------------------------------------------------------: |
-| Abp.Grpc.Server | [![NuGet version](https://img.shields.io/badge/NuGet-1.0.7-green.svg)](https://www.nuget.org/packages/Abp.Grpc.Client/) |
-| Abp.Grpc.Client | [![NuGet version](https://img.shields.io/badge/NuGet-1.0.7-green.svg)](https://www.nuget.org/packages/Abp.Grpc.Client/) |
+| Abp.Grpc.Server | [![NuGet version](https://img.shields.io/badge/NuGet-3.8.2-brightgreen.svg)](https://www.nuget.org/packages/Abp.Grpc.Client/) |
+| Abp.Grpc.Client | [![NuGet version](https://img.shields.io/badge/NuGet-3.8.2-brightgreen.svg)](https://www.nuget.org/packages/Abp.Grpc.Client/) |
 
-# Abp.Grpc.Server 使用说明
-## 简介
+# 3.使用方法
 
-本模块使网站项目支持 Grpc 服务，并且能够向 Consul 注册自己，以便使客户端能够调用本站点提供的 Grpc 服务。
+在定义接口的时候可能会很复杂，但是使用还是挺简单的。
 
-## 安装
+## 3.1服务提供者
 
-NUGET 包地址：[https://www.nuget.org/packages/Abp.Grpc.Server/](https://www.nuget.org/packages/Abp.Grpc.Server/)
-包名称：Abp.Grpc.Server
-包管理器命令：
+### 3.1.1 安装 NuGet 包
+
+需要提供 Grpc 服务的项目，只需引用 NuGet 包 **Abp.Grpc.Client** ，之后进行相应的配置即可。
+
+NuGet 包地址：[https://www.nuget.org/packages/Abp.Grpc.Server/](https://www.nuget.org/packages/Abp.Grpc.Server/)
+
+包管理器安装命令：
 
 ```shell
-Install-Package Abp.Grpc.Server -Version 1.0.1
+Install-Package Abp.Grpc.Server -Version 3.8.2
 ```
 
-包版本：1.0.1
-
-## 配置
-
-### 模块配置
+### 3.1.2 项目模块配置
 
 在需要使用该模块的项目的启动模块中当中添加如下引用:
 
@@ -53,32 +55,34 @@ public class StartupModule : AbpModule
 ```csharp
 public override void PreInitialize()
 {
-    // 启用 Grpc 服务
-	Configuration.Modules.UseGrpcService(option =>
-	{
-        // 配置 Grpc 绑定的 IP 地址，一般默认为 0.0.0.0
-		option.GrpcBindAddress = "0.0.0.0";
-        // 配置 Grpc 绑定的开放端口
-		option.GrpcBindPort = 5001;
-        // 启用 Consul 服务注册，可选，但我们开发的时候统一必选
-		option.UseConsul(consulOption =>
-		{
-            // Consul 注册地址
-			consulOption.ConsulAddress = "192.168.100.107";
-			// Consul 注册的端口
+    Configuration.Modules.UseGrpcService(option =>
+    {
+        // GRPC 服务绑定的 IP 地址
+        option.GrpcBindAddress = "0.0.0.0";
+        // GRPC 服务绑定的 端口号
+        option.GrpcBindPort = 5001;
+        // 启用 Consul 服务注册【可选】
+        option.UseConsul(consulOption =>
+        {
+            // Consul 服务注册地址
+            consulOption.ConsulAddress = "10.0.75.1";
+            // Consul 服务注册端口号
             consulOption.ConsulPort = 8500;
-            // 当前 Grpc 注册的服务名称
-			consulOption.RegistrationServiceName = "BasicDataServer";
-            // 健康检查端口
-			consulOption.ConsulHealthCheckPort = 5000;
-		});
-	}).AddRpcServiceAssembly(typeof(HKERPGrpcServiceModule).Assembly);
+            // 注册到 Consul 的服务名称
+            consulOption.RegistrationServiceName = "TestGrpcService";
+            // 健康检查接口的地址，不填为默认当前机器的随机 IP 地址
+            consulOption.ConsulHealthCheckAddress = "172.31.61.41";
+            // 健康检查接口的端口号
+            consulOption.ConsulHealthCheckPort = 5000;
+        });
+    })
+    .AddRpcServiceAssembly(typeof(AbpGrpcServerDemoModule).Assembly); // 扫描当前程序集的所有 GRPC 服务
 }
 ```
 
-### 健康检查配置
+### 3.1.3 健康检查配置【可选】
 
-配置完成模块之后，下面新建一个控制器，其名称取名为 ```HealthController``` ，并且新建一个 ```Check``` 接口，用于 Consul 进行健康检查。
+如果你启用了 Consul 注册，需要新建一个控制器，其名称取名为 ```HealthController``` ，并且新建一个 ```Check``` 接口，用于 Consul 进行健康检查。
 
 ```csharp
 public class HealthController : HKERPControllerBase
@@ -91,11 +95,11 @@ public class HealthController : HKERPControllerBase
 }
 ```
 
-## 使用
+### 3.1.4 定义提供的服务接口
 
 如果你使用了 Abp.Grpc.Server 则需要在某个程序集当中定义你的 RPC 服务，下面代码就定义了两个简单的服务，是计算两数之和的服务。  
 
-### 定义服务接口
+为了统一服务定义与调用者接口的定义，在此建议你的接口定义请单独新建一个项目，并且在该项目当中引用 Abp.Grpc.Common 库，用于定义服务提供者所提供的 Grpc 接口。
 
 ```csharp
 public interface IMyService : IService<IMyService>
@@ -104,7 +108,7 @@ public interface IMyService : IService<IMyService>
 }
 ```
 
-### 实现服务接口
+### 3.1.5 实现提供的服务接口
 
 ```csharp
 public class MyService : ServiceBase<IMyService>,IMyService
@@ -118,7 +122,7 @@ public class MyService : ServiceBase<IMyService>,IMyService
 
 实现了服务接口之后就只需要在客户端引入 Abp.Grpc.Client 配置好服务即可进行使用。
 
-## 注意事项
+### 3.1.6 注意事项
 
 在定义 Rpc 方法的时候，如果需要序列化自定义对象的话，需要在该对象类型定义上方打上 ```[MessagePackObject(true)]``` 标签，例如：
 
@@ -146,31 +150,26 @@ public interface IUserAuthenticationService : IService<IUserAuthenticationServic
 }
 ```
 
-# Abp.Grpc.Client 使用说明
-## 简介
+## 3.2 服务调用者
 
-本模块使网站/程序能够支持 Grpc 服务调用，从 Consul 当中发现可用的 Rpc 服务，并且进行调用。
+### 3.2.1 安装 NuGet 包
 
-## 安装
+NuGet 包地址：[https://www.nuget.org/packages/Abp.Grpc.Client/](https://www.nuget.org/packages/Abp.Grpc.Client/)
 
-NUGET 包地址：[https://www.nuget.org/packages/Abp.Grpc.Client/](https://www.nuget.org/packages/Abp.Grpc.Client/)
-包名称：Abp.Grpc.Client
-包管理器命令：
+包管理器安装命令：
 
 ```shell
-Install-Package Abp.Grpc.Client -Version 1.0.7	
+Install-Package Abp.Grpc.Client -Version 3.8.2
 ```
 
-包版本：1.0.7
-
-## 配置
+### 3.2.2 项目模块配置
 
 首先在 Web.Core 项目或者 Web.Host 的模块的 ```PreInitiailze()``` 方法当中进行配置，首先引入以下命名空间：
 
 ```csharp
 using Abp.GRpc.Client;
-using Abp.GRpc.Client.Configuration;
-using Abp.GRpc.Client.Extensions;
+using Abp.Grpc.Client.Extensions;
+using Abp.Grpc.Common.Configuration;
 ```
 
 然后在启动模块的顶部加上依赖特性：
@@ -189,28 +188,17 @@ public class StartupModule : AbpModule
 public override void PreInitialize()
 {
     // 传入 Consul 的 IP 地址与端口号
-	Configuration.Modules.UseGrpcClient(new ConsulRegistryConfiguration("192.168.100.107", 8500, null));
+	Configuration.Modules.UseGrpcClient(new ConsulRegistryConfiguration("10.0.75.1", 8500, null));
 }
 ```
 
-## 使用
+### 3.2.3 引用服务提供者的接口
 
-### 定义服务接口
+在这里添加服务提供者所发布 Grpc 接口的 NuGet 包，或者直接引用该项目，以便调用接口。在 DEMO 项目中即是引用的项目，当然为了版本管理，你可以将该项目发布为 NuGet 包，客户端在使用的时候需要引用该 NuGet 包。
 
-要使用远程的 RPC 服务就需要你拥有跟远程服务一样的接口定义，最佳实践应该是将定义独立为一个项目，Server 与 Client 引用同一个项目即可，下面我们来定义 RPC 服务的接口：
+### 3.2.4 调用接口
 
-```csharp
-public interface IMyService : IService<IMyService>
-{
-    UnaryResult<int> CalculateNumber(int x,int y);
-}
-```
-
-这里的定义与 Server 那边一样，所以我们定义好之后就可以调用了。
-
-### 注入连接管理器
-
-要调用远程服务，需要在你是用的地方注入连接管理器 ```IGrpcConnectionUtility```，然后通过 ```IGrpcConnectionUtility.GetRemoteService``` 方法即可获得服务。
+要调用远程服务，需要在你是用的地方注入连接管理器 ```IGrpcConnectionUtility```，然后通过 ```IGrpcConnectionUtility.GetRemoteService()``` 方法即可获得服务并进行调用。
 
 ```csharp
 public class TestAppService : ApplicationService
@@ -224,25 +212,20 @@ public class TestAppService : ApplicationService
     
     public async Task TestMethod()
     {
-    	var result = await _connectionUtility.GetRemoteService<IMyService>("BasicDataServer").CalculateNumber(1,1);
+    	// 从 Consul 当中获取 BasicDataServer 服务提供者集群，然后获取到 IMyService 的接口
+    	var service = await _connectionUtility.GetRemoteService<IMyService>("BasicDataServer");
+    	// 调用服务 IMyService 服务提供的 CalculateNumber 接口
+    	var result = await service.CalculateNumber(1,1);
     	Console.WriteLine("计算结果:" + result);
     	return Task.FromResult(0);
     }
 }
 ```
 
-这里注意你的服务名称一定要与之前注册的服务名称一致。
+## 4.DEMO 地址
 
-## 注意事项
+如果你仍然对以上说明感觉到困惑，请参考 DEMO 进行实践。
 
-这里的服务名称应该是存放在 appsettings 里面，通过Configuration 来获取具体的服务名称，此处是为了演示而直接硬编码书写，实际开发过程中，服务名称应该是由 appsettings 里面拿去，其节点应该统一定义为：
+服务端 DEMO：[https://github.com/GameBelial/Abp.Grpc.Server.Demo](https://github.com/GameBelial/Abp.Grpc.Server.Demo)
 
-```json
-{
-  "GrpcServer": {
-    // 基础数据微服务
-    "BasicDataServerName": "BasicDataGrpc"
-  }
-}
-```
-
+客户端 DEMO：[https://github.com/GameBelial/Abp.Grpc.Client.Demo](https://github.com/GameBelial/Abp.Grpc.Client.Demo)
