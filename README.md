@@ -10,7 +10,7 @@ Abp.Grpc 包是基于 Abp 框架并集成 MagicOnion 实现的一个模块，能
 
 | Package         |                            Status                            |
 | :-------------- | :----------------------------------------------------------: |
-| Abp.Grpc.Server | [![NuGet version](https://img.shields.io/badge/NuGet-3.8.2-brightgreen.svg)](https://www.nuget.org/packages/Abp.Grpc.Client/) |
+| Abp.Grpc.Server | [![NuGet version](https://img.shields.io/badge/NuGet-3.8.2-brightgreen.svg)](https://www.nuget.org/packages/Abp.Grpc.Server/) |
 | Abp.Grpc.Client | [![NuGet version](https://img.shields.io/badge/NuGet-3.8.2-brightgreen.svg)](https://www.nuget.org/packages/Abp.Grpc.Client/) |
 
 # 3.使用方法
