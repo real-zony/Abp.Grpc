@@ -21,7 +21,10 @@ namespace Abp.Grpc.Client.Utility
         /// <inheritdoc />
         public TService GetRemoteService<TService>(string serviceName) where TService : IService<TService>
         {
-            if (!_clientConfiguration.GrpcServers.ContainsKey(serviceName)) throw new UserFriendlyException("你所选择的服务不存在，无法获取服务.");
+            if (!_clientConfiguration.GrpcServers.ContainsKey(serviceName))
+            {
+                throw new UserFriendlyException("你所选择的服务不存在，无法获取服务.");
+            }
 
             // TODO: 此处的节点应该做负载均衡和可用检测
             var serviceChannel = _clientConfiguration.GrpcServers[serviceName].FirstOrDefault();

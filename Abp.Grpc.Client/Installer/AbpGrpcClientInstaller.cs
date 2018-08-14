@@ -14,9 +14,9 @@ namespace Abp.Grpc.Client.Installer
         {
             container.Register(
                 Component.For<IConsulClientFactory, ConsulClientFactory>().ImplementedBy<ConsulClientFactory>().LifestyleSingleton(),
-                Component.For<IGrpcClientConfiguration, GrpcClientConfiguration>().ImplementedBy<GrpcClientConfiguration>().LifestyleSingleton(),
                 Component.For<IGrpcChannelFactory, GrpcChannelFactory>().ImplementedBy<GrpcChannelFactory>().LifestyleSingleton(),
-                Component.For<IGrpcConnectionUtility, GrpcConnectionUtility>().ImplementedBy<GrpcConnectionUtility>().LifestyleSingleton()
+                Component.For<IGrpcConnectionUtility, GrpcConnectionUtility>().ImplementedBy<GrpcConnectionUtility>().LifestyleSingleton(),
+                Component.For<IGrpcClientConfiguration, GrpcClientConfiguration>().ImplementedBy<GrpcClientConfiguration>().LifestyleSingleton()
                 );
         }
     }

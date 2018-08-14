@@ -8,6 +8,7 @@ using MagicOnion.Server;
 using System;
 using System.Linq;
 using System.Net;
+
 using GrpcServer = Grpc.Core.Server;
 
 namespace Abp.Grpc.Server
@@ -16,9 +17,10 @@ namespace Abp.Grpc.Server
     public class AbpGrpcServerModule : AbpModule
     {
         private GrpcServer _grpcServer;
-
         private IConsulClient _consulClient;
         private AgentServiceRegistration _agentServiceRegistration;
+
+        private const string ServiceName = "Grpc";
 
         public override void PreInitialize()
         {
@@ -41,8 +43,8 @@ namespace Abp.Grpc.Server
 
         public override void Shutdown()
         {
-            _grpcServer.ShutdownAsync().Wait();
-            _consulClient?.Agent.ServiceDeregister(_agentServiceRegistration.ID).Wait();
+            _grpcServer.ShutdownAsync().GetAwaiter().GetResult();
+            _consulClient?.Agent.ServiceDeregister(_agentServiceRegistration.ID).GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -73,6 +75,7 @@ namespace Abp.Grpc.Server
             if (!config.IsEnableConsul) return;
 
             var currentIpAddress = GetCurrentIpAddress(config);
+
             _consulClient = IocManager.Resolve<IConsulClientFactory>()
                 .Get(new ConsulRegistryConfiguration(config.ConsulAddress, config.ConsulPort, null));
 
@@ -80,9 +83,11 @@ namespace Abp.Grpc.Server
             {
                 ID = Guid.NewGuid().ToString(),
                 Name = config.RegistrationServiceName,
-                Address = currentIpAddress,
+                Address = config.GrpcBindAddress,
                 Port = config.GrpcBindPort,
-                Tags = new[] { "Grpc", $"urlprefix-/{config.RegistrationServiceName}" },
+                Tags = new[] { ServiceName, $"urlprefix-/{config.RegistrationServiceName}" },
+
+                // 健康检查配置
                 Check = new AgentServiceCheck
                 {
                     DeregisterCriticalServiceAfter = TimeSpan.FromSeconds(5),
@@ -93,7 +98,7 @@ namespace Abp.Grpc.Server
                 }
             };
 
-            _consulClient.Agent.ServiceRegister(_agentServiceRegistration).Wait();
+            _consulClient.Agent.ServiceRegister(_agentServiceRegistration).GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -105,6 +110,7 @@ namespace Abp.Grpc.Server
         {
             if (!string.IsNullOrEmpty(config.ConsulHealthCheckAddress)) return config.ConsulHealthCheckAddress;
 
+            // 如果没有指定则随机分配主机地址
             IPAddress localAddress = Dns.GetHostAddresses(Dns.GetHostName()).FirstOrDefault();
             if (localAddress == null) throw new AbpInitializationException("无法初始化项目，无法获取到当前服务器的地址.");
             return localAddress.ToString();
