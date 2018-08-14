@@ -4,6 +4,9 @@ using Abp.Grpc.Common.Configuration;
 
 namespace Abp.Grpc.Client.Extensions
 {
+    /// <summary>
+    /// Grpc Client 使用时的帮助类，用于配置连接时的参数
+    /// </summary>
     public static class GrpcClientConfigurationExtensions
     {
         /// <summary>
