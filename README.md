@@ -10,8 +10,8 @@ Abp.Grpc 包是基于 Abp 框架并集成 MagicOnion 实现的一个模块，能
 
 | Package         |                            Status                            |
 | :-------------- | :----------------------------------------------------------: |
-| Abp.Grpc.Server | [![NuGet version](https://img.shields.io/badge/NuGet-3.8.2-brightgreen.svg)](https://www.nuget.org/packages/Abp.Grpc.Server/) |
-| Abp.Grpc.Client | [![NuGet version](https://img.shields.io/badge/NuGet-3.8.2-brightgreen.svg)](https://www.nuget.org/packages/Abp.Grpc.Client/) |
+| Abp.Grpc.Server | [![NuGet version](https://img.shields.io/badge/NuGet-3.8.2.1-brightgreen.svg)](https://www.nuget.org/packages/Abp.Grpc.Server/) |
+| Abp.Grpc.Client | [![NuGet version](https://img.shields.io/badge/NuGet-3.8.2.1-brightgreen.svg)](https://www.nuget.org/packages/Abp.Grpc.Client/) |
 
 # 3.使用方法
 
@@ -28,7 +28,7 @@ NuGet 包地址：[https://www.nuget.org/packages/Abp.Grpc.Server/](https://www.
 包管理器安装命令：
 
 ```shell
-Install-Package Abp.Grpc.Server -Version 3.8.2
+Install-Package Abp.Grpc.Server -Version 3.8.2.1
 ```
 
 ### 3.1.2 项目模块配置
@@ -159,7 +159,7 @@ NuGet 包地址：[https://www.nuget.org/packages/Abp.Grpc.Client/](https://www.
 包管理器安装命令：
 
 ```shell
-Install-Package Abp.Grpc.Client -Version 3.8.2
+Install-Package Abp.Grpc.Client -Version 3.8.2.1
 ```
 
 ### 3.2.2 项目模块配置
