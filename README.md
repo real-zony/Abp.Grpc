@@ -189,8 +189,8 @@ public class StartupModule : AbpModule
 ```csharp
 public override void PreInitialize()
 {
-    // 传入 Consul 的 IP 地址与端口号
-	Configuration.Modules.UseGrpcClient(new ConsulRegistryConfiguration("10.0.75.1", 8500, null));
+    // 如果你需要客户端进行负载均衡操作，请传入 Consul 的 IP 地址与端口号
+    Configuration.Modules.UseGrpcClient(new ConsulRegistryConfiguration("10.0.75.1", 8500, null));
 }
 ```
 
