@@ -17,7 +17,7 @@ namespace Abp.Grpc.Client.Utility
         /// <summary>
         /// 从模块预加载配置的固定 Grpc 服务端获取指定服务，主要用于调试使用
         /// </summary>
-        /// <typeparam name="TService"></typeparam>
+        /// <typeparam name="TService">远程接口服务类型</typeparam>
         /// <returns></returns>
         TService GetRemoteServiceForDebug<TService>() where TService : IService<TService>;
     }

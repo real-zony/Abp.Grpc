@@ -4,7 +4,6 @@ using System;
 
 namespace Abp.Grpc.Client.Infrastructure.GrpcChannel
 {
-    /// <inheritdoc />
     public class GrpcChannelFactory : IGrpcChannelFactory
     {
         /// <inheritdoc />

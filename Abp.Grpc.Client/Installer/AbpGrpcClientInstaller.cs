@@ -13,10 +13,11 @@ namespace Abp.Grpc.Client.Installer
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
             container.Register(
-                Component.For<IConsulClientFactory, ConsulClientFactory>().ImplementedBy<ConsulClientFactory>().LifestyleSingleton(),
+                Component.For<IGrpcClientConfiguration, GrpcClientConfiguration>().ImplementedBy<GrpcClientConfiguration>().LifestyleSingleton(),
                 Component.For<IGrpcChannelFactory, GrpcChannelFactory>().ImplementedBy<GrpcChannelFactory>().LifestyleSingleton(),
-                Component.For<IGrpcConnectionUtility, GrpcConnectionUtility>().ImplementedBy<GrpcConnectionUtility>().LifestyleSingleton(),
-                Component.For<IGrpcClientConfiguration, GrpcClientConfiguration>().ImplementedBy<GrpcClientConfiguration>().LifestyleSingleton()
+                Component.For<IConsulClientFactory, ConsulClientFactory>().ImplementedBy<ConsulClientFactory>().LifestyleSingleton(),
+                Component.For<IGrpcChannelManager, GrpcChannelManager>().ImplementedBy<GrpcChannelManager>().LifestyleSingleton(),
+                Component.For<IGrpcConnectionUtility, GrpcConnectionUtility>().ImplementedBy<GrpcConnectionUtility>().LifestyleSingleton()
                 );
         }
     }

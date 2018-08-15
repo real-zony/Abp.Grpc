@@ -29,7 +29,7 @@ namespace Abp.Grpc.Client.Extensions
         public static void UseGrpcClientForDebug(this IModuleConfigurations configs, string grpcServerIp,
             int grpcServerPort)
         {
-            configs.AbpConfiguration.Get<IGrpcClientConfiguration>().SetDebugMode(grpcServerIp, grpcServerPort);
+            configs.AbpConfiguration.Get<IGrpcClientConfiguration>().EnableDebugMode(grpcServerIp, grpcServerPort);
         }
     }
 }
