@@ -20,7 +20,7 @@ namespace Abp.Grpc.Server
         private IConsulClient _consulClient;
         private AgentServiceRegistration _agentServiceRegistration;
 
-        private const string ServiceName = "Grpc";
+        private const string GrpcServiceTag = "Grpc";
 
         public override void PreInitialize()
         {
@@ -31,20 +31,21 @@ namespace Abp.Grpc.Server
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(typeof(AbpGrpcServerModule).Assembly);
-        }
 
-        public override void PostInitialize()
-        {
+            // TODO: 此处为了防止在 Grpc 服务器启动前 Client 开始调用服务，所以放在 Initialize 进行初始化服务器
             IGrpcServerConfiguration grpcConfiguration = IocManager.Resolve<IGrpcServerConfiguration>();
-
             InitializeGrpcServer(grpcConfiguration);
-            InitializeConsul(grpcConfiguration);
+
+            if (grpcConfiguration.IsEnableConsul)
+            {
+                InitializeConsul(grpcConfiguration);
+            }
         }
 
         public override void Shutdown()
         {
-            _grpcServer.ShutdownAsync().GetAwaiter().GetResult();
-            _consulClient?.Agent.ServiceDeregister(_agentServiceRegistration.ID).GetAwaiter().GetResult();
+            _grpcServer.ShutdownAsync().Wait();
+            _consulClient?.Agent.ServiceDeregister(_agentServiceRegistration.ID).Wait();
         }
 
         /// <summary>
@@ -72,12 +73,9 @@ namespace Abp.Grpc.Server
         /// <param name="config"></param>
         private void InitializeConsul(IGrpcServerConfiguration config)
         {
-            if (!config.IsEnableConsul) return;
-
             var currentIpAddress = GetCurrentIpAddress(config);
 
-            _consulClient = IocManager.Resolve<IConsulClientFactory>()
-                .Get(new ConsulRegistryConfiguration(config.ConsulAddress, config.ConsulPort, null));
+            _consulClient = IocManager.Resolve<IConsulClientFactory>().Get(new ConsulRegistryConfiguration(config.ConsulAddress, config.ConsulPort, null));
 
             _agentServiceRegistration = new AgentServiceRegistration
             {
@@ -85,7 +83,7 @@ namespace Abp.Grpc.Server
                 Name = config.RegistrationServiceName,
                 Address = config.GrpcBindAddress,
                 Port = config.GrpcBindPort,
-                Tags = new[] { ServiceName, $"urlprefix-/{config.RegistrationServiceName}" },
+                Tags = new[] { GrpcServiceTag, $"urlprefix-/{config.RegistrationServiceName}" },
 
                 // 健康检查配置
                 Check = new AgentServiceCheck

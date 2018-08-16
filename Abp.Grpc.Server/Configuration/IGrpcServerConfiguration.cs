@@ -4,12 +4,12 @@ using System.Reflection;
 namespace Abp.Grpc.Server.Configuration
 {
     /// <summary>
-    /// GRPC 服务端配置
+    /// Grpc 服务端配置
     /// </summary>
     public interface IGrpcServerConfiguration : IConsulConfiguration, IGrpcConfiguration
     {
         /// <summary>
-        /// 存在 Rpc 服务的程序集集合
+        /// 存在 Grpc 服务的程序集集合
         /// </summary>
         IReadOnlyList<Assembly> GrpcAssemblies { get; }
 

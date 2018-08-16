@@ -5,12 +5,12 @@ using System;
 namespace Abp.Grpc.Server.Extensions
 {
     /// <summary>
-    /// GRPC 配置相关的扩展方法
+    /// Grpc 配置相关的扩展方法
     /// </summary>
     public static class GrpcServerConfigurationExtensions
     {
         /// <summary>
-        /// 启用 GRPC 服务
+        /// 启用 Grpc 服务
         /// </summary>
         /// <param name="configs">Abp 配置模块</param>
         /// <param name="optionAction">配置操作</param>
@@ -24,7 +24,7 @@ namespace Abp.Grpc.Server.Extensions
         /// <summary>
         /// 启用 Consul 服务注册
         /// </summary>
-        /// <param name="config">GRPC 配置项</param>
+        /// <param name="config">Grpc 配置项</param>
         /// <param name="optionAction">配置操作</param>
         public static void UseConsul(this IGrpcConfiguration config, Action<IConsulConfiguration> optionAction)
         {
