@@ -1,6 +1,8 @@
 # 0.简介
 
-Abp.Grpc 包是基于 Abp 框架并集成 MagicOnion 实现的一个模块，能够使你的 Abp 项目支持 Grpc，并且还集成了 Consul 进行服务注册与发现。
+Abp.Grpc 包是基于 Abp 框架并集成 MagicOnion 实现的一个模块，能够使你的 Abp 项目支持 Grpc，并且还集成了 Consul 进行服务注册与发现。  
+  
+![流程图](https://blog.myzony.com/content/images/2018/08/TIM--20180815122602.png)
 
 # 1.目前存在的问题
 
@@ -10,8 +12,8 @@ Abp.Grpc 包是基于 Abp 框架并集成 MagicOnion 实现的一个模块，能
 
 | Package         |                            Status                            |
 | :-------------- | :----------------------------------------------------------: |
-| Abp.Grpc.Server | [![NuGet version](https://img.shields.io/badge/NuGet-3.8.2-brightgreen.svg)](https://www.nuget.org/packages/Abp.Grpc.Server/) |
-| Abp.Grpc.Client | [![NuGet version](https://img.shields.io/badge/NuGet-3.8.2-brightgreen.svg)](https://www.nuget.org/packages/Abp.Grpc.Client/) |
+| Abp.Grpc.Server | [![NuGet version](https://img.shields.io/badge/NuGet-3.8.2.1-brightgreen.svg)](https://www.nuget.org/packages/Abp.Grpc.Server/) |
+| Abp.Grpc.Client | [![NuGet version](https://img.shields.io/badge/NuGet-3.8.2.1-brightgreen.svg)](https://www.nuget.org/packages/Abp.Grpc.Client/) |
 
 # 3.使用方法
 
@@ -28,7 +30,7 @@ NuGet 包地址：[https://www.nuget.org/packages/Abp.Grpc.Server/](https://www.
 包管理器安装命令：
 
 ```shell
-Install-Package Abp.Grpc.Server -Version 3.8.2
+Install-Package Abp.Grpc.Server -Version 3.8.2.1
 ```
 
 ### 3.1.2 项目模块配置
@@ -159,7 +161,7 @@ NuGet 包地址：[https://www.nuget.org/packages/Abp.Grpc.Client/](https://www.
 包管理器安装命令：
 
 ```shell
-Install-Package Abp.Grpc.Client -Version 3.8.2
+Install-Package Abp.Grpc.Client -Version 3.8.2.1
 ```
 
 ### 3.2.2 项目模块配置
@@ -187,8 +189,8 @@ public class StartupModule : AbpModule
 ```csharp
 public override void PreInitialize()
 {
-    // 传入 Consul 的 IP 地址与端口号
-	Configuration.Modules.UseGrpcClient(new ConsulRegistryConfiguration("10.0.75.1", 8500, null));
+    // 如果你需要客户端进行负载均衡操作，请传入 Consul 的 IP 地址与端口号
+    Configuration.Modules.UseGrpcClient(new ConsulRegistryConfiguration("10.0.75.1", 8500, null));
 }
 ```
 
