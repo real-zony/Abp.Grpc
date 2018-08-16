@@ -2,6 +2,8 @@
 using Abp.Grpc.Client.Configuration;
 using Abp.Grpc.Client.Infrastructure.GrpcChannel;
 using Abp.Grpc.Client.Installer;
+using Abp.Grpc.Client.Utility;
+using Abp.Grpc.Common.Infrastructure;
 using Abp.Modules;
 
 namespace Abp.Grpc.Client
@@ -16,6 +18,11 @@ namespace Abp.Grpc.Client
 
         public override void Initialize()
         {
+            IocManager.Register<IGrpcChannelFactory, GrpcChannelFactory>();
+            IocManager.Register<IConsulClientFactory, ConsulClientFactory>();
+            IocManager.Register<IGrpcChannelManager, GrpcChannelManager>();
+            IocManager.Register<IGrpcConnectionUtility, GrpcConnectionUtility>();
+
             IocManager.RegisterAssemblyByConvention(typeof(AbpGrpcClientModule).Assembly,
                 new ConventionalRegistrationConfig
                 {
@@ -28,7 +35,7 @@ namespace Abp.Grpc.Client
             var configuration = IocManager.Resolve<GrpcClientConfiguration>();
 
             // 未处于调试模式则需要清空所有连接
-            if (!configuration.IsDebugMode)
+            if (configuration.ConsulRegistryConfiguration != null)
             {
                 var channelManager = IocManager.Resolve<IGrpcChannelManager>();
                 foreach (var channel in channelManager.GetAllChannels())

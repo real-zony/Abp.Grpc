@@ -13,8 +13,8 @@
     <PackageTags>git</PackageTags>
     <PackageReleaseNotes>asp.net;asp.net mvc;boilerplate;application framework;web framework;framework;domain driven design;asp.net core</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>3.8.2.1</AssemblyVersion>
-    <FileVersion>3.8.2.1</FileVersion>
+    <AssemblyVersion>3.8.2.2</AssemblyVersion>
+    <FileVersion>3.8.2.2</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

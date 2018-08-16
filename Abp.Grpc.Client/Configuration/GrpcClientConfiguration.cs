@@ -13,29 +13,13 @@ namespace Abp.Grpc.Client.Configuration
         public ConsulRegistryConfiguration ConsulRegistryConfiguration { get; set; }
 
         /// <summary>
-        /// Debug 模式的 Grpc 服务端配置
+        /// 直连模式需要进行的配置
         /// </summary>
-        public GrpcDebugConfiguration GrpcDebugConfiguration { get; set; }
+        public GrpcDirectConnectionConfiguration GrpcDirectConnectionConfiguration { get; set; }
 
-        /// <summary>
-        /// 是否处于调试模式
-        /// </summary>
-        public bool IsDebugMode { get; private set; }
-
-        /// <summary>
-        /// 启用调试模式
-        /// </summary>
-        /// <param name="debugGrpcServerIp">远程 Grpc 服务器 IP</param>
-        /// <param name="debugGrpcServerPort">远程 Grpc 服务器端口</param>
-        public void EnableDebugMode(string debugGrpcServerIp, int debugGrpcServerPort)
+        public GrpcClientConfiguration()
         {
-            GrpcDebugConfiguration = new GrpcDebugConfiguration
-            {
-                DebugGrpcServerIp = debugGrpcServerIp,
-                DebugGrpcServerPort = debugGrpcServerPort
-            };
-
-            IsDebugMode = GrpcDebugConfiguration != null;
+            GrpcDirectConnectionConfiguration = new GrpcDirectConnectionConfiguration();
         }
     }
 }

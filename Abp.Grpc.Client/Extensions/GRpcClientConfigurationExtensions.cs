@@ -14,22 +14,30 @@ namespace Abp.Grpc.Client.Extensions
         /// </summary>
         /// <param name="configs"></param>
         /// <param name="consulConfig">Consul 服务器配置</param>
-        public static void UseGrpcClient(this IModuleConfigurations configs, ConsulRegistryConfiguration consulConfig)
+        public static void UseGrpcClientForConsul(this IModuleConfigurations configs, ConsulRegistryConfiguration consulConfig)
         {
             var clientConfig = configs.AbpConfiguration.Get<IGrpcClientConfiguration>();
             clientConfig.ConsulRegistryConfiguration = consulConfig;
         }
 
         /// <summary>
-        /// 启用 Debug 模式的 Grpc Client 客户端连接
+        /// 启用直连模式的 Grpc Client 客户端连接
         /// </summary>
         /// <param name="configs"></param>
-        /// <param name="grpcServerIp">调试用 Grpc 服务器的 IP</param>
-        /// <param name="grpcServerPort">调试用 Grpc 服务器的 端口</param>
-        public static void UseGrpcClientForDebug(this IModuleConfigurations configs, string grpcServerIp,
-            int grpcServerPort)
+        /// <param name="grpcNodes">Grpc 服务器节点列表</param>
+        public static void UseGrpcClientForDirectConnection(this IModuleConfigurations configs, params GrpcServerNode[] grpcNodes)
         {
-            configs.AbpConfiguration.Get<IGrpcClientConfiguration>().EnableDebugMode(grpcServerIp, grpcServerPort);
+            var internalDict = configs.AbpConfiguration.Get<IGrpcClientConfiguration>().GrpcDirectConnectionConfiguration.GrpcServerNodes;
+
+            foreach (var grpcNode in grpcNodes)
+            {
+                if (internalDict.ContainsKey(grpcNode.GrpcServiceName))
+                {
+                    throw new AbpInitializationException("不能添加重复的名称的 Grpc 服务节点.");
+                }
+
+                internalDict.Add(grpcNode.GrpcServiceName, grpcNode);
+            }
         }
     }
 }
