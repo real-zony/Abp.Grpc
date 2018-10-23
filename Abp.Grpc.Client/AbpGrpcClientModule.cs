@@ -19,7 +19,7 @@ namespace Abp.Grpc.Client
         public override void Initialize()
         {
             IocManager.Register<IGrpcChannelFactory, GrpcChannelFactory>();
-            IocManager.Register<IConsulClientFactory, ConsulClientFactory>();
+            IocManager.RegisterIfNot<IConsulClientFactory, ConsulClientFactory>();
             IocManager.Register<IGrpcChannelManager, GrpcChannelManager>();
             IocManager.Register<IGrpcConnectionUtility, GrpcConnectionUtility>();
 

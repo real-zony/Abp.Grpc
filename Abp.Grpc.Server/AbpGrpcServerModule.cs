@@ -8,7 +8,7 @@ using MagicOnion.Server;
 using System;
 using System.Linq;
 using System.Net;
-
+using Abp.Dependency;
 using GrpcServer = Grpc.Core.Server;
 
 namespace Abp.Grpc.Server
@@ -24,7 +24,7 @@ namespace Abp.Grpc.Server
 
         public override void PreInitialize()
         {
-            IocManager.Register<IConsulClientFactory, ConsulClientFactory>();
+            IocManager.RegisterIfNot<IConsulClientFactory, ConsulClientFactory>();
             IocManager.Register<IGrpcServerConfiguration, GrpcServerConfiguration>();
         }
 
