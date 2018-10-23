@@ -11,9 +11,7 @@
     <RepositoryUrl>https://github.com/GameBelial/Abp.Grpc</RepositoryUrl>
     <PackageLicenseUrl>https://github.com/GameBelial/Abp.Grpc/blob/master/LICENSE.txt</PackageLicenseUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>3.8.2.2</Version>
-    <AssemblyVersion>3.8.2.2</AssemblyVersion>
-    <FileVersion>3.8.2.2</FileVersion>
+    <Version>3.9.0.0</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
