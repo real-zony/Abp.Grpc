@@ -1,7 +1,7 @@
 # 0.简介
 
 Abp.Grpc 包是基于 Abp 框架并集成 MagicOnion 实现的一个模块，能够使你的 Abp 项目支持 Grpc，并且还集成了 Consul 进行服务注册与发现。  
-  
+
 ![流程图](https://blog.myzony.com/content/images/2018/08/TIM--20180815122602.png)
 
 # 1.目前存在的问题
@@ -19,7 +19,7 @@ Abp.Grpc 包是基于 Abp 框架并集成 MagicOnion 实现的一个模块，能
 
 在定义接口的时候可能会很复杂，但是使用还是挺简单的。
 
-## 3.1 服务提供者
+## 3.1 Grpc 服务提供者
 
 ### 3.1.1 安装 NuGet 包
 
@@ -30,7 +30,7 @@ NuGet 包地址：[https://www.nuget.org/packages/Abp.Grpc.Server/](https://www.
 包管理器安装命令：
 
 ```shell
-Install-Package Abp.Grpc.Server -Version 3.8.2.1
+Install-Package Abp.Grpc.Server -Version 3.9.0.1
 ```
 
 ### 3.1.2 项目模块配置
@@ -63,6 +63,24 @@ public override void PreInitialize()
         option.GrpcBindAddress = "0.0.0.0";
         // GRPC 服务绑定的 端口号
         option.GrpcBindPort = 5001;
+    })
+    .AddRpcServiceAssembly(typeof(AbpGrpcServerDemoModule).Assembly); // 扫描当前程序集的所有 GRPC 服务
+}
+```
+
+#### 3.1.2.1 【可选】启用 Consul 注册
+
+如果需要启用 Consul 注册的话，则在 Module 的 ```PreInitialize``` 方法当中使用 ```UseConsul()``` 方法配置 Consul 服务器，代码如下。
+
+```csharp
+public override void PreInitialize()
+{
+    Configuration.Modules.UseGrpcService(option =>
+    {
+        // GRPC 服务绑定的 IP 地址
+        option.GrpcBindAddress = "0.0.0.0";
+        // GRPC 服务绑定的 端口号
+        option.GrpcBindPort = 5001;
         // 启用 Consul 服务注册【可选】
         option.UseConsul(consulOption =>
         {
@@ -79,10 +97,8 @@ public override void PreInitialize()
         });
     })
     .AddRpcServiceAssembly(typeof(AbpGrpcServerDemoModule).Assembly); // 扫描当前程序集的所有 GRPC 服务
-}
+}        
 ```
-
-### 3.1.3 健康检查配置【可选】
 
 如果你启用了 Consul 注册，需要新建一个控制器，其名称取名为 ```HealthController``` ，并且新建一个 ```Check``` 接口，用于 Consul 进行健康检查。
 
@@ -152,7 +168,7 @@ public interface IUserAuthenticationService : IService<IUserAuthenticationServic
 }
 ```
 
-## 3.2 服务调用者
+## 3.2 Grpc 服务调用者
 
 ### 3.2.1 安装 NuGet 包
 
@@ -161,7 +177,7 @@ NuGet 包地址：[https://www.nuget.org/packages/Abp.Grpc.Client/](https://www.
 包管理器安装命令：
 
 ```shell
-Install-Package Abp.Grpc.Client -Version 3.8.2.1
+Install-Package Abp.Grpc.Client -Version 3.9.0.1
 ```
 
 ### 3.2.2 项目模块配置
@@ -184,6 +200,8 @@ public class StartupModule : AbpModule
 }
 ```
 
+#### 3.2.2.1 直连模式
+
 重载其 ```PreInitialize``` 方法，进行模块配置：
 
 ```csharp
@@ -193,6 +211,10 @@ public override void PreInitialize()
     Configuration.Modules.UseGrpcClient(new ConsulRegistryConfiguration("10.0.75.1", 8500, null));
 }
 ```
+
+#### 3.2.2.2 Consul 发现模式
+
+
 
 ### 3.2.3 引用服务提供者的接口
 
@@ -224,10 +246,45 @@ public class TestAppService : ApplicationService
 }
 ```
 
-# 4.DEMO 地址
+## 4. Session 状态传递
 
-如果你仍然对以上说明感觉到困惑，请参考 DEMO 进行实践。
+因为本模块是基于 Abp 框架的，所以在我们开发一个 Grpc 接口的时候，A 平台调用 B 平台提供的服务时，需要传递用户状态。而我们可以通过在接口定义时附加一个 ```GrpcSession``` 参数，通过该参数我们可以传递 A 平台调用时他的 ```AbpSession``` 的值。
 
-服务端 DEMO：[https://github.com/GameBelial/Abp.Grpc.Server.Demo](https://github.com/GameBelial/Abp.Grpc.Server.Demo)
+我们可以定义一个接口，该接口主要打印当前登录用户的 ```UserId``` 信息：
 
-客户端 DEMO：[https://github.com/GameBelial/Abp.Grpc.Client.Demo](https://github.com/GameBelial/Abp.Grpc.Client.Demo)
+```csharp
+/// <summary>
+/// 打印调用者传递的用户 ID 数据，并返回其转换为字符串的结果
+/// </summary>
+/// <param name="session">AbpSession 的值</param>
+/// <returns>用户 ID</returns>
+UnaryResult<string> PrintCurrentUserId(GrpcSession session);
+```
+
+在该接口内部，可以通过 ```IAbpSession``` 提供的 ```Use()``` 方法临时将当前服务端平台登录用户的 ```UserId``` 进行临时变更。
+
+```csharp
+public UnaryResult<string> PrintCurrentUserId(GrpcSession session)
+{
+    Console.WriteLine($"接收客户端传递 Session 值之前，服务端的用户 Id 值: {_tmpAbpSession.UserId}");
+    string resultUserIdStr;
+
+    using (_tmpAbpSession.Use(session.TenantId, session.UserId))
+    {
+        resultUserIdStr = (_tmpAbpSession.UserId ?? 0).ToString();
+        Console.WriteLine($"临时变更的 AbpSession 值: {_tmpAbpSession.UserId}");
+    }
+
+    Console.WriteLine($"退出 using 语句块时，当前用户的 Id 值: {_tmpAbpSession.UserId}");
+
+    return new UnaryResult<string>(resultUserIdStr);
+}
+```
+
+那么在客户端调用的时候，只需要传递客户端当前的 ```IAbpSession``` 值即可。
+
+
+
+## 5. DEMO 项目
+
+如果你仍然针对上述说明存有疑问，那么可以跳转到 [DEMO](http://) 目录下，运行 DEMO 项目进行了解。

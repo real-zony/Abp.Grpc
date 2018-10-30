@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abp.Grpc.Samples.Server", "Abp.Grpc.Samples.Server\Abp.Grpc.Samples.Server.csproj", "{7C1FA76D-B846-4B6B-B855-3E02EF4E1534}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abp.Grpc.Samples.Client", "Abp.Grpc.Samples.Client\Abp.Grpc.Samples.Client.csproj", "{AC9A816F-E24B-4304-81C0-733DE36691FE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7C1FA76D-B846-4B6B-B855-3E02EF4E1534}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C1FA76D-B846-4B6B-B855-3E02EF4E1534}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C1FA76D-B846-4B6B-B855-3E02EF4E1534}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C1FA76D-B846-4B6B-B855-3E02EF4E1534}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC9A816F-E24B-4304-81C0-733DE36691FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC9A816F-E24B-4304-81C0-733DE36691FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC9A816F-E24B-4304-81C0-733DE36691FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC9A816F-E24B-4304-81C0-733DE36691FE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
