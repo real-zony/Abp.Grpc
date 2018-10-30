@@ -214,7 +214,23 @@ public override void PreInitialize()
 
 #### 3.2.2.2 Consul 发现模式
 
+重载其 ```PreInitialize``` 方法，进行模块配置：
 
+```csharp
+public override void PreInitialize()
+{
+	// 使用直连模式
+	Configuration.Modules.UseGrpcClientForDirectConnection(new[]
+	{
+		new GrpcServerNode
+		{
+			GrpcServiceIp = "127.0.0.1",
+			GrpcServiceName = "TestServiceName",
+			GrpcServicePort = 40001
+		}
+	});   
+}
+```
 
 ### 3.2.3 引用服务提供者的接口
 
@@ -223,6 +239,8 @@ public override void PreInitialize()
 ### 3.2.4 调用接口
 
 要调用远程服务，需要在你是用的地方注入连接管理器 ```IGrpcConnectionUtility```，然后通过 ```IGrpcConnectionUtility.GetRemoteService()``` 方法即可获得服务并进行调用。
+
+当然 Consul 模式与直连模式获取服务的方法都是不一样的，下面代码展示了两者之间的区别。
 
 ```csharp
 public class TestAppService : ApplicationService
@@ -246,7 +264,15 @@ public class TestAppService : ApplicationService
 }
 ```
 
-## 4. Session 状态传递
+## 3.3 使用直连模式还是 Consul 模式？
+
+使用直连模式，那么如果要实现负载均衡的话，十分方便，直接在 GrpcNode 节点定义填写时，填上负载均衡器的地址即可。
+
+使用 Consul 模式，则需要用户自己重写 ```IGrpcChannelManager``` 实现，自己实现负载均衡算法。
+
+> **在这里我建议直接使用直连模式。**
+
+# 4. Session 状态传递
 
 因为本模块是基于 Abp 框架的，所以在我们开发一个 Grpc 接口的时候，A 平台调用 B 平台提供的服务时，需要传递用户状态。而我们可以通过在接口定义时附加一个 ```GrpcSession``` 参数，通过该参数我们可以传递 A 平台调用时他的 ```AbpSession``` 的值。
 
@@ -283,8 +309,22 @@ public UnaryResult<string> PrintCurrentUserId(GrpcSession session)
 
 那么在客户端调用的时候，只需要传递客户端当前的 ```IAbpSession``` 值即可。
 
+```csharp
+public void TestMethod()
+{
+	// ... 其他代码
+	// 取得 IAbpSession 对象
+	var abpSession = bootstarp.IocManager.Resolve<IAbpSession>();
+	// 临时更改
+	using (abpSession.Use(1000,2000))
+	{
+		var userId = services.PrintCurrentUserId(abpSession as AbpSessionBase).GetAwaiter().GetResult();
+		Console.WriteLine($"服务端收到的 UserId 值: {userId}");
+	}
+	// ... 其他代码
+}
+```
 
-
-## 5. DEMO 项目
+# 5. DEMO 项目
 
 如果你仍然针对上述说明存有疑问，那么可以跳转到 [DEMO](http://) 目录下，运行 DEMO 项目进行了解。
