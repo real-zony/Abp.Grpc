@@ -81,8 +81,8 @@ namespace Abp.Grpc.Server
             {
                 ID = Guid.NewGuid().ToString(),
                 Name = config.RegistrationServiceName,
-                Address = config.GrpcBindAddress,
-                Port = config.GrpcBindPort,
+                Address = config.ConsulAddress,
+                Port = config.ConsulPort,
                 Tags = new[] { GrpcServiceTag, $"urlprefix-/{config.RegistrationServiceName}" },
 
                 // 健康检查配置
