@@ -1,8 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>3.9.0.1</Version>
+    <Version>4.0.2.0</Version>
     <Authors>Zony</Authors>
     <Company>Zony</Company>
     <Product>Abp.Grpc.Common</Product>
@@ -21,7 +21,7 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="Abp" Version="3.9.0" />
+    <PackageReference Include="Abp" Version="4.0.2" />
     <PackageReference Include="Consul" Version="0.7.2.6" />
     <PackageReference Include="MagicOnion" Version="0.5.3" />
   </ItemGroup>
