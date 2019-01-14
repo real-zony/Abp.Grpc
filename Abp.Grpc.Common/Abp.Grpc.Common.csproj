@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>4.0.2.0</Version>
+    <Version>4.1.0.0</Version>
     <Authors>Zony</Authors>
     <Company>Zony</Company>
     <Product>Abp.Grpc.Common</Product>
