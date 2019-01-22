@@ -200,7 +200,7 @@ public class StartupModule : AbpModule
 }
 ```
 
-#### 3.2.2.1 直连模式
+#### 3.2.2.1 Consul 发现模式
 
 重载其 ```PreInitialize``` 方法，进行模块配置：
 
@@ -212,7 +212,7 @@ public override void PreInitialize()
 }
 ```
 
-#### 3.2.2.2 Consul 发现模式
+#### 3.2.2.2 直连模式
 
 重载其 ```PreInitialize``` 方法，进行模块配置：
 
