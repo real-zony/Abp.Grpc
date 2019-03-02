@@ -30,7 +30,7 @@ NuGet 包地址：[https://www.nuget.org/packages/Abp.Grpc.Server/](https://www.
 包管理器安装命令：
 
 ```shell
-Install-Package Abp.Grpc.Server -Version 3.9.0.1
+Install-Package Abp.Grpc.Server
 ```
 
 ### 3.1.2 项目模块配置
@@ -177,7 +177,7 @@ NuGet 包地址：[https://www.nuget.org/packages/Abp.Grpc.Client/](https://www.
 包管理器安装命令：
 
 ```shell
-Install-Package Abp.Grpc.Client -Version 3.9.0.1
+Install-Package Abp.Grpc.Client
 ```
 
 ### 3.2.2 项目模块配置
