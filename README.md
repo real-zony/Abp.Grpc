@@ -12,8 +12,8 @@ Abp.Grpc 包是基于 Abp 框架并集成 MagicOnion 实现的一个模块，能
 
 | Package         |                            Status                            | Downloads                                                    |
 | :-------------- | :----------------------------------------------------------: | ------------------------------------------------------------ |
-| Abp.Grpc.Server | [![NuGet version](https://img.shields.io/badge/nuget-4.4.0-brightgreen.svg)](https://www.nuget.org/packages/Abp.Grpc.Server/) | [![downloads](https://img.shields.io/nuget/dt/Abp.Grpc.Server.svg?style=flat-square)](https://www.nuget.org/stats/packages/Abp.Grpc.Server?groupby=Version) |
-| Abp.Grpc.Client | [![NuGet version](https://img.shields.io/badge/nuget-4.4.0-brightgreen.svg)](https://www.nuget.org/packages/Abp.Grpc.Client/) | [![downloads](https://img.shields.io/nuget/dt/Abp.Grpc.Client.svg?style=flat-square)](https://www.nuget.org/stats/packages/Abp.Grpc.Client?groupby=Version) |
+| Abp.Grpc.Server | [![NuGet version](https://img.shields.io/badge/nuget-4.5.0-brightgreen.svg)](https://www.nuget.org/packages/Abp.Grpc.Server/) | [![downloads](https://img.shields.io/nuget/dt/Abp.Grpc.Server.svg?style=flat-square)](https://www.nuget.org/stats/packages/Abp.Grpc.Server?groupby=Version) |
+| Abp.Grpc.Client | [![NuGet version](https://img.shields.io/badge/nuget-4.5.0-brightgreen.svg)](https://www.nuget.org/packages/Abp.Grpc.Client/) | [![downloads](https://img.shields.io/nuget/dt/Abp.Grpc.Client.svg?style=flat-square)](https://www.nuget.org/stats/packages/Abp.Grpc.Client?groupby=Version) |
 
 # 3.使用方法
 
