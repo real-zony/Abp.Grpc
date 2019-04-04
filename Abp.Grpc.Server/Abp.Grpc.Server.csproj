@@ -11,7 +11,7 @@
     <RepositoryUrl>https://github.com/GameBelial/Abp.Grpc</RepositoryUrl>
     <PackageLicenseUrl>https://github.com/GameBelial/Abp.Grpc/blob/master/LICENSE.txt</PackageLicenseUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>4.4.0</Version>
+    <Version>4.5.0</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
