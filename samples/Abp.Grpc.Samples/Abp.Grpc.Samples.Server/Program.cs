@@ -12,7 +12,7 @@ namespace Abp.Grpc.Samples.Server
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseKestrel(op=>op.ListenAnyIP(5000))
+                .UseKestrel(op => op.ListenAnyIP(5000))
                 .UseStartup<Startup>();
     }
 }

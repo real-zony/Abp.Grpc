@@ -1,14 +1,20 @@
-﻿using Abp.Grpc.Common.Configuration;
+﻿using System;
+using System.Linq;
+using System.Net;
+using System.Threading;
+using Abp.Dependency;
+using Abp.Grpc.Common.Configuration;
 using Abp.Grpc.Common.Infrastructure;
 using Abp.Grpc.Server.Configuration;
+using Abp.Grpc.Server.DependencyInject;
 using Abp.Modules;
+using Abp.Threading;
+using Castle.MicroKernel.Registration;
 using Consul;
 using Grpc.Core;
 using MagicOnion.Server;
-using System;
-using System.Linq;
-using System.Net;
-using Abp.Dependency;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using GrpcServer = Grpc.Core.Server;
 
 namespace Abp.Grpc.Server
@@ -16,7 +22,6 @@ namespace Abp.Grpc.Server
     [DependsOn(typeof(AbpKernelModule))]
     public class AbpGrpcServerModule : AbpModule
     {
-        private GrpcServer _gRpcServer;
         private IConsulClient _consulClient;
         private AgentServiceRegistration _agentServiceRegistration;
 
@@ -44,7 +49,7 @@ namespace Abp.Grpc.Server
 
         public override void Shutdown()
         {
-            _gRpcServer.ShutdownAsync().Wait();
+            AsyncHelper.RunSync(() => IocManager.Resolve<IHostedService>().StopAsync(CancellationToken.None));
             _consulClient?.Agent.ServiceDeregister(_agentServiceRegistration.ID).Wait();
         }
 
@@ -54,17 +59,29 @@ namespace Abp.Grpc.Server
         /// <param name="config">Grpc 配置项</param>
         private void InitializeGrpcServer(IGrpcServerConfiguration config)
         {
-            _gRpcServer = new GrpcServer
-            {
-                Ports = { new ServerPort(config.GrpcBindAddress, config.GrpcBindPort, ServerCredentials.Insecure) },
-                Services =
-                {
-                    MagicOnionEngine.BuildServerServiceDefinition(config.GrpcAssemblies.ToArray(),
-                        new MagicOnionOptions(true))
-                }
-            };
+            var options = new MagicOnionOptions();
+            options.IsReturnExceptionStackTraceInErrorDetail = true;
+            
+            var serviceLocator = new CasteWindsorServiceLocatorBridge(IocManager);
 
-            _gRpcServer.Start();
+            options.ServiceLocator = serviceLocator;
+
+            // 构建 gRpc 服务。
+            MagicOnionServiceDefinition serviceDefine = null;
+
+            if (config.GrpcAssemblies != null)
+            {
+                serviceDefine = MagicOnionEngine.BuildServerServiceDefinition(config.GrpcAssemblies.ToArray(), options);
+            }
+            
+            // 注入 gRpc 服务到 IoC 容器当中。
+            IocManager.IocContainer.Register(Component.For<MagicOnionServiceDefinition>().Instance(serviceDefine).LifestyleSingleton());
+            IocManager.IocContainer.Register(Component.For<IHostedService>().Instance(new PackageMagicOnionServerService(serviceDefine, new[]
+            {
+                new ServerPort(config.GrpcBindAddress, config.GrpcBindPort, ServerCredentials.Insecure)
+            }, null)).LifestyleSingleton());
+
+            AsyncHelper.RunSync(()=>IocManager.Resolve<IHostedService>().StartAsync(CancellationToken.None));
         }
 
         /// <summary>

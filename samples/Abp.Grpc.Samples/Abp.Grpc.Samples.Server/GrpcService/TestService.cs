@@ -11,9 +11,9 @@ namespace Abp.Grpc.Samples.Server.GrpcService
     {
         private readonly IAbpSession _tmpAbpSession;
 
-        public TestService()
+        public TestService(IAbpSession tmpAbpSession)
         {
-            _tmpAbpSession = IocManager.Instance.Resolve<IIocManager>().Resolve<IAbpSession>();
+            _tmpAbpSession = tmpAbpSession;
         }
 
         public UnaryResult<int> Sum(int x, int y)

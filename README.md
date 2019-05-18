@@ -4,6 +4,8 @@ Abp.Grpc 包是基于 Abp 框架并集成 MagicOnion 实现的一个模块，能
 
 ![流程图](https://blog.myzony.com/content/images/2018/08/TIM--20180815122602.png)
 
+ABP vNext 版本正在开发当中，新的仓库地址届时会在本说明当中贴出。
+
 # 1.目前存在的问题
 
 参考 **[Issues](https://github.com/GameBelial/Abp.Grpc/issues)** 里面里程碑提列出来的问题。
@@ -140,7 +142,13 @@ public class MyService : ServiceBase<IMyService>,IMyService
 
 实现了服务接口之后就只需要在客户端引入 Abp.Grpc.Client 配置好服务即可进行使用。
 
-### 3.1.6 注意事项
+### 3.1.6 MagicOnion 的依赖注入支持
+
+在 **MagicOnion** 库的 v 2.1.0 版本当中支持依赖注入，这也意味着在实现服务的时候，可以通过构造注入/属性注入来使用 IoC 容器里面的服务。(在老版本只能使用 ABP 提供的静态 `IIocManager` 实例)
+
+如果用户需要启用依赖注入支持，无需进行其他的配置。
+
+### 3.1.7 注意事项
 
 在定义 Rpc 方法的时候，如果需要序列化自定义对象的话，需要在该对象类型定义上方打上 ```[MessagePackObject(true)]``` 标签，例如：
 
