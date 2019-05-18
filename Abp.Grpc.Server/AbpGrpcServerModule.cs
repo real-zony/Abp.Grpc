@@ -16,7 +16,7 @@ namespace Abp.Grpc.Server
     [DependsOn(typeof(AbpKernelModule))]
     public class AbpGrpcServerModule : AbpModule
     {
-        private GrpcServer _grpcServer;
+        private GrpcServer _gRpcServer;
         private IConsulClient _consulClient;
         private AgentServiceRegistration _agentServiceRegistration;
 
@@ -44,7 +44,7 @@ namespace Abp.Grpc.Server
 
         public override void Shutdown()
         {
-            _grpcServer.ShutdownAsync().Wait();
+            _gRpcServer.ShutdownAsync().Wait();
             _consulClient?.Agent.ServiceDeregister(_agentServiceRegistration.ID).Wait();
         }
 
@@ -54,7 +54,7 @@ namespace Abp.Grpc.Server
         /// <param name="config">Grpc 配置项</param>
         private void InitializeGrpcServer(IGrpcServerConfiguration config)
         {
-            _grpcServer = new GrpcServer
+            _gRpcServer = new GrpcServer
             {
                 Ports = { new ServerPort(config.GrpcBindAddress, config.GrpcBindPort, ServerCredentials.Insecure) },
                 Services =
@@ -64,7 +64,7 @@ namespace Abp.Grpc.Server
                 }
             };
 
-            _grpcServer.Start();
+            _gRpcServer.Start();
         }
 
         /// <summary>
