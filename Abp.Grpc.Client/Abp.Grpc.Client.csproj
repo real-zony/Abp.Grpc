@@ -10,7 +10,7 @@
     <PackageLicenseUrl>https://github.com/GameBelial/Abp.Grpc/blob/master/LICENSE.txt</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/GameBelial/Abp.Grpc</PackageProjectUrl>
     <RepositoryUrl>https://github.com/GameBelial/Abp.Grpc</RepositoryUrl>
-    <Version>4.8.1</Version>
+    <Version>4.9.0</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -19,7 +19,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Polly" Version="7.1.0" />
+    <PackageReference Include="Polly" Version="7.1.1" />
   </ItemGroup>
 
   <ItemGroup>

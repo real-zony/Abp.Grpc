@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>4.8.1</Version>
+    <Version>4.9.0</Version>
     <Authors>Zony</Authors>
     <Company>Zony</Company>
     <Product>Abp.Grpc.Common</Product>
@@ -21,10 +21,10 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="Abp" Version="4.8.1" />
+    <PackageReference Include="Abp" Version="4.9.0" />
     <PackageReference Include="Consul" Version="0.7.2.6" />
-    <PackageReference Include="MagicOnion" Version="2.2.1" />
-    <PackageReference Include="MagicOnion.Hosting" Version="2.2.1" />
+    <PackageReference Include="MagicOnion" Version="2.6.2" />
+    <PackageReference Include="MagicOnion.Hosting" Version="2.6.2" />
   </ItemGroup>
 
 </Project>
