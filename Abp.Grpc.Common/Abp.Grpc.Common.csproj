@@ -21,10 +21,10 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="Abp" Version="4.9.0" />
+    <PackageReference Include="Abp" Version="5.0.0" />
     <PackageReference Include="Consul" Version="0.7.2.6" />
-    <PackageReference Include="MagicOnion" Version="2.6.2" />
-    <PackageReference Include="MagicOnion.Hosting" Version="2.6.2" />
+    <PackageReference Include="MagicOnion" Version="2.6.3" />
+    <PackageReference Include="MagicOnion.Hosting" Version="2.6.3" />
   </ItemGroup>
 
 </Project>
